@@ -1,0 +1,5 @@
+{
+  "name": "RailTrack Analytics",
+  "description": "Exploratory Visualization System for Train Delay Analysis featuring 3D models, geographic maps, and station performance dashboards.",
+  "requestFramePermissions": ["geolocation"]
+}
