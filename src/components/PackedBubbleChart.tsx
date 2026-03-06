@@ -6,6 +6,24 @@ interface PackedBubbleChartProps {
   data: TrainData[];
 }
 
+interface NodeData {
+  id: string;
+  group: string;
+  value: number;
+  radius: number;
+  x?: number;
+  y?: number;
+  fx?: number | null;
+  fy?: number | null;
+  originalRadius: number;
+}
+
+interface GroupData {
+  id: string;
+  value: number;
+  count: number;
+}
+
 export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -13,8 +31,8 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
   const processedData = useMemo(() => {
     const zones = Array.from(new Set(data.map(d => d.Railway_Zone))).sort();
     
-    const nodes: any[] = [];
-    const groups: any[] = [];
+    const nodes: NodeData[] = [];
+    const groups: GroupData[] = [];
 
     zones.forEach((zone) => {
       const zoneData = data.filter(d => d.Railway_Zone === zone);
@@ -196,10 +214,10 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
       .attr("opacity", 1);
 
     // --- Force Simulation ---
-    const simulation = d3.forceSimulation(processedData.nodes)
-      .force("x", d3.forceX((d: any) => groupCenters[d.group].x).strength(0.08))
-      .force("y", d3.forceY((d: any) => groupCenters[d.group].y).strength(0.08))
-      .force("collide", d3.forceCollide((d: any) => d.radius + 3).strength(0.9))
+    const simulation = d3.forceSimulation<NodeData>(processedData.nodes)
+      .force("x", d3.forceX((d: NodeData) => groupCenters[d.group].x).strength(0.08))
+      .force("y", d3.forceY((d: NodeData) => groupCenters[d.group].y).strength(0.08))
+      .force("collide", d3.forceCollide((d: NodeData) => d.radius + 3).strength(0.9))
       .force("charge", d3.forceManyBody().strength(-2));
 
     // --- Draw Nodes (Bubbles) ---
@@ -216,7 +234,7 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
       .attr("stroke-opacity", 0.4)
       .style("filter", "url(#drop-shadow)")
       .style("cursor", "pointer")
-      .call(d3.drag<SVGCircleElement, any>()
+      .call(d3.drag<SVGCircleElement, NodeData>()
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended));
@@ -287,19 +305,19 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
       }
     });
 
-    function dragstarted(event: any, d: any) {
+    function dragstarted(event: d3.D3DragEvent<SVGCircleElement, NodeData, NodeData>, d: NodeData) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
       d.fy = d.y;
       d3.select(event.sourceEvent.target).style("cursor", "grabbing");
     }
 
-    function dragged(event: any, d: any) {
+    function dragged(event: d3.D3DragEvent<SVGCircleElement, NodeData, NodeData>, d: NodeData) {
       d.fx = event.x;
       d.fy = event.y;
     }
 
-    function dragended(event: any, d: any) {
+    function dragended(event: d3.D3DragEvent<SVGCircleElement, NodeData, NodeData>, d: NodeData) {
       if (!event.active) simulation.alphaTarget(0);
       d.fx = null;
       d.fy = null;
