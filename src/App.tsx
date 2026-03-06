@@ -39,6 +39,7 @@ import {
 } from './components/Charts';
 import { TrainDetailsTable } from './components/TrainDetailsTable';
 import { PackedBubbleChart } from './components/PackedBubbleChart';
+import { SpaceTimeCube, CongestionTowers, RadialDelayRose, VelocityVortex } from './components/Advanced3DCharts';
 
 const TrainRankingTable = ({ data }: { data: TrainData[] }) => {
   const ranking = useMemo(() => {
@@ -428,6 +429,22 @@ def render_geospatial(df):
                 {/* Packed Bubble Chart (Emerging Topics Style) */}
                 <div className="mb-8">
                   <PackedBubbleChart data={cumulativeData} />
+                </div>
+
+                {/* Advanced 3D Analytics Grid */}
+                <div className="grid grid-cols-12 gap-6 mb-8">
+                  <div className="col-span-12 lg:col-span-6">
+                    <SpaceTimeCube data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <CongestionTowers data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <RadialDelayRose data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <VelocityVortex data={cumulativeData} />
+                  </div>
                 </div>
 
                 {/* Detailed Data Table (Limited to 50 rows) */}
