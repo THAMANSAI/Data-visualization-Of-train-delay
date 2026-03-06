@@ -1,15 +1,13 @@
-"""
-RailTrack Analytics: Professional Train Delay Dashboard
-------------------------------------------------------
-A high-performance analytics system built with Streamlit and Plotly.
-
-Features:
-- 3D Surface & Scatter Cluster Analysis
-- Geographical Mapbox Integration
-- Temporal Distribution & Density Modeling
-- KPI Trend Tracking
-- Advanced 3D Analytics (Space-Time, Congestion Towers, Vortex)
-"""
+# RailTrack Analytics: Professional Train Delay Dashboard
+# ------------------------------------------------------
+# A high-performance analytics system built with Streamlit and Plotly.
+#
+# Features:
+# - 3D Surface & Scatter Cluster Analysis
+# - Geographical Mapbox Integration
+# - Temporal Distribution & Density Modeling
+# - KPI Trend Tracking
+# - Advanced 3D Analytics (Space-Time, Congestion Towers, Vortex)
 
 import streamlit as st
 import pandas as pd
