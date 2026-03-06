@@ -39,7 +39,13 @@ import {
 } from './components/Charts';
 import { TrainDetailsTable } from './components/TrainDetailsTable';
 import { PackedBubbleChart } from './components/PackedBubbleChart';
-import { SpaceTimeCube, CongestionTowers, RadialDelayRose, VelocityVortex } from './components/Advanced3DCharts';
+import { RadialDelayRose, VelocityVortex } from './components/Advanced3DCharts';
+import { WeatherDelayTerrain, DelayFlowSankey, PerformanceParallel, ZoneTimeRibbon, DelaySunburst } from './components/ExtraAnalytics';
+import { StrategicKPIs } from './components/StrategicKPIs';
+import { TimeSeriesTrend, ComparativePerformance, PredictiveForecast } from './components/TrendAnalytics';
+import { RouteRadarComparison, DelayDistributionBox, CorrelationHeatmap } from './components/StatisticalAnalysis';
+import { EventTimeline, NetworkTopology, DelayPropagation } from './components/NetworkDynamics';
+import { CapacityUtilization, StationLeaderboard, DelayTreemap, PassengerImpactFunnel, ScheduleGantt } from './components/OperationalEfficiency';
 
 const TrainRankingTable = ({ data }: { data: TrainData[] }) => {
   const ranking = useMemo(() => {
@@ -62,33 +68,37 @@ const TrainRankingTable = ({ data }: { data: TrainData[] }) => {
   }, [data]);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-card h-full flex flex-col overflow-hidden">
-      <div className="p-5 border-b border-slate-100 bg-slate-50/50">
-        <h3 className="text-text-primary font-bold text-lg font-serif italic">Critical Latency Units</h3>
-        <p className="metadata-xs text-text-muted mt-1">Top 5 units by average delay</p>
+    <div className="glass-panel rounded-3xl h-full flex flex-col overflow-hidden relative group">
+      <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+        <TrendingUp size={120} />
+      </div>
+
+      <div className="p-8 border-b border-white/5 bg-white/5 relative z-10">
+        <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Critical Latency Units</h3>
+        <p className="metadata-xs text-accent-rose mt-1">Top 5 units by average delay</p>
       </div>
       
-      <div className="flex-1 divide-y divide-slate-100">
+      <div className="flex-1 divide-y divide-white/5 relative z-10">
         {ranking.map((t, i) => (
-          <div key={t.id} className="flex items-center justify-between p-4 hover:bg-text-primary hover:text-white transition-all duration-300 cursor-pointer group">
-            <div className="flex items-center gap-4">
-              <span className="font-mono text-xs opacity-40 group-hover:opacity-100">0{i+1}</span>
+          <div key={t.id} className="flex items-center justify-between p-6 hover:bg-white/5 transition-all duration-500 cursor-pointer group/item">
+            <div className="flex items-center gap-6">
+              <span className="font-mono text-xs font-black text-accent-cyan opacity-40 group-hover/item:opacity-100">0{i+1}</span>
               <div>
-                <div className="text-sm font-bold tracking-tight group-hover:text-white">{t.name}</div>
-                <div className="metadata-xs opacity-60 group-hover:opacity-100">{t.id}</div>
+                <div className="text-base font-black tracking-tight text-white group-hover/item:text-accent-cyan transition-colors">{t.name}</div>
+                <div className="metadata-xs opacity-60 font-mono">{t.id}</div>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-lg font-bold font-mono text-accent-rose group-hover:text-white">{t.avgDelay}m</div>
-              <div className="text-[10px] uppercase tracking-widest opacity-40 group-hover:opacity-100">delay</div>
+              <div className="text-2xl font-black font-mono text-accent-rose group-hover/item:scale-110 transition-transform">+{t.avgDelay}m</div>
+              <div className="text-[9px] uppercase font-black tracking-[0.2em] text-text-muted">variance</div>
             </div>
           </div>
         ))}
       </div>
       
-      <div className="p-4 bg-slate-50 border-t border-slate-100">
-        <button className="w-full py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted hover:text-text-primary transition-colors">
-          View Full Fleet Report
+      <div className="p-8 bg-black/20 border-t border-white/5 relative z-10">
+        <button className="w-full py-4 text-[10px] font-black uppercase tracking-[0.3em] text-accent-cyan hover:text-white transition-all hover:bg-white/5 rounded-2xl border border-accent-cyan/20 hover:border-accent-cyan/40 shadow-[0_0_20px_rgba(0,209,255,0.1)] hover:shadow-[0_0_30px_rgba(0,209,255,0.2)]">
+          Full Fleet Report
         </button>
       </div>
     </div>
@@ -172,17 +182,13 @@ export default function App() {
         <div className="absolute inset-0 grid-pattern pointer-events-none" />
         
         {/* Header */}
-        <header className="h-20 border-b border-slate-200 bg-white/50 backdrop-blur-md flex items-center justify-between px-8 z-40">
+        <header className="h-20 border-b border-white/5 bg-black/20 backdrop-blur-2xl flex items-center justify-between px-8 z-40">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-text-primary rounded-xl flex items-center justify-center shadow-lg">
               <Train className="text-white" size={20} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-text-primary tracking-tight font-serif italic">Visualization OF TRAIN Delay</h1>
-              <div className="flex items-center gap-2 mt-0.5">
-                <span className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
-                <span className="metadata-xs font-bold text-text-muted">System Active • Live Telemetry</span>
-              </div>
+              <h1 className="text-xl font-black text-white tracking-tighter uppercase italic">RailTrack Systems</h1>
             </div>
           </div>
 
@@ -192,29 +198,29 @@ export default function App() {
                 { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
                 { id: 'map', icon: MapIcon, label: 'Map' },
                 { id: 'analytics', icon: BarChart3, label: 'Analytics' },
-                { id: 'schedule', icon: Calendar, label: 'Schedule' },
+                { id: 'advanced', icon: TrendingUp, label: 'Advanced' },
               ].map((item) => (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`px-3 py-2 rounded-lg flex items-center gap-2 transition-all text-sm font-medium ${
+                  className={`px-4 py-2 rounded-full flex items-center gap-2 transition-all text-xs font-black uppercase tracking-widest ${
                     activeTab === item.id 
-                      ? 'bg-accent-cyan/10 text-accent-cyan shadow-sm' 
-                      : 'text-text-muted hover:text-text-primary hover:bg-slate-50'
+                      ? 'bg-accent-cyan text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]' 
+                      : 'text-text-muted hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <item.icon size={16} />
+                  <item.icon size={14} />
                   {item.label}
                 </button>
               ))}
             </div>
-            <div className="h-8 w-px bg-slate-200" />
+            <div className="h-8 w-px bg-white/10" />
             <div className="flex flex-col items-end">
-              <span className="metadata-xs text-text-muted">Local Time</span>
-              <span className="text-sm font-mono font-bold">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+              <span className="metadata-xs text-text-muted">Live Feed</span>
+              <span className="text-sm font-mono font-black text-accent-cyan">{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
             </div>
-            <div className="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 overflow-hidden ml-2">
-              <img src="https://picsum.photos/seed/user/32/32" alt="User" referrerPolicy="no-referrer" />
+            <div className="w-10 h-10 rounded-full border-2 border-accent-cyan/20 p-0.5 ml-2">
+              <img src="https://picsum.photos/seed/user/40/40" className="rounded-full" alt="User" referrerPolicy="no-referrer" />
             </div>
           </div>
         </header>
@@ -230,20 +236,38 @@ export default function App() {
                 exit={{ opacity: 0, y: 10 }}
                 className="max-w-5xl mx-auto"
               >
-                <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-card overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-violet-500/5 blur-3xl rounded-full -mr-32 -mt-32" />
-                  <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-3 font-serif italic">
-                    <FileCode className="text-accent-violet" />
-                    Python Analytics Infrastructure
-                  </h2>
-                  <div className="prose prose-slate max-w-none">
-                    <p className="text-text-secondary mb-8 text-lg leading-relaxed">
-                      The underlying data processing engine utilizes <code>Pandas</code> for vectorization and <code>Plotly</code> for high-fidelity rendering. 
-                      This architecture ensures sub-millisecond latency for complex spatial queries.
-                    </p>
-                    <div className="relative group">
-                      <div className="absolute -inset-1 bg-linear-to-r from-violet-500 to-blue-500 rounded-xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
-                      <pre className="relative bg-slate-900 p-8 rounded-xl border border-slate-800 overflow-x-auto text-sm font-mono text-blue-300 shadow-2xl">
+                <div className="glass-panel rounded-[3rem] p-12 shadow-card overflow-hidden relative">
+                  <div className="absolute top-0 right-0 w-96 h-96 bg-accent-violet/10 blur-[120px] rounded-full -mr-48 -mt-48" />
+                  <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent-cyan/10 blur-[120px] rounded-full -ml-48 -mb-48" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-12">
+                      <h2 className="text-3xl font-black text-white flex items-center gap-4 uppercase tracking-[0.3em] italic">
+                        <FileCode className="text-accent-violet" size={32} />
+                        Analytics Engine
+                      </h2>
+                      <div className="flex gap-2">
+                        <span className="metadata-xs font-black px-3 py-1.5 rounded-lg bg-white/5 text-text-secondary border border-white/10 uppercase tracking-widest">Python 3.11</span>
+                        <span className="metadata-xs font-black px-3 py-1.5 rounded-lg bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20 uppercase tracking-widest">Production</span>
+                      </div>
+                    </div>
+
+                    <div className="prose prose-invert max-w-none">
+                      <p className="text-text-secondary mb-12 text-xl leading-relaxed font-medium">
+                        The underlying data processing engine utilizes <code className="text-accent-cyan bg-accent-cyan/10 px-2 py-0.5 rounded">Pandas</code> for vectorization and <code className="text-accent-violet bg-accent-violet/10 px-2 py-0.5 rounded">Plotly</code> for high-fidelity rendering. 
+                        This architecture ensures sub-millisecond latency for complex spatial queries.
+                      </p>
+                      
+                      <div className="relative group">
+                        <div className="absolute -inset-1 bg-linear-to-r from-accent-violet to-accent-cyan rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        <div className="relative bg-black/60 backdrop-blur-3xl p-10 rounded-2xl border border-white/10 overflow-x-auto text-sm font-mono text-accent-cyan shadow-2xl">
+                          <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-4">
+                            <div className="w-3 h-3 rounded-full bg-accent-rose/50" />
+                            <div className="w-3 h-3 rounded-full bg-accent-amber/50" />
+                            <div className="w-3 h-3 rounded-full bg-accent-cyan/50" />
+                            <span className="ml-4 metadata-xs text-text-muted">telemetry_engine.py</span>
+                          </div>
+                          <pre className="text-accent-cyan/90 leading-relaxed">
 {`import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -264,7 +288,9 @@ def render_geospatial(df):
         size="impact_score",
         mapbox_style="stamen-toner")
     st.plotly_chart(fig, use_container_width=True)`}
-                      </pre>
+                          </pre>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -277,59 +303,69 @@ def render_geospatial(df):
                 exit={{ opacity: 0 }}
                 className="space-y-8"
               >
+                {/* Strategic KPI Section */}
+                <StrategicKPIs data={cumulativeData} />
+
                 {/* Control Strip */}
-                <div className="flex flex-wrap items-center justify-between gap-6 bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 shadow-sm">
-                  <div className="flex items-center gap-6">
+                <div className="flex flex-wrap items-center justify-between gap-6 bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/10 shadow-2xl">
+                  <div className="flex items-center gap-8">
                     <div className="flex flex-col">
-                      <span className="filter-label">Train Selection</span>
+                      <span className="filter-label">Fleet Unit</span>
                       <div className="relative mt-1">
                         <select 
                           value={selectedTrain}
                           onChange={(e) => setSelectedTrain(e.target.value)}
-                          className="appearance-none bg-white border border-slate-200 rounded-lg px-4 py-2 pr-10 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent-cyan/20 transition-all cursor-pointer hover:border-slate-300"
+                          className="appearance-none bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 pr-10 text-xs font-black uppercase tracking-widest text-white focus:outline-none focus:ring-2 focus:ring-accent-cyan/40 transition-all cursor-pointer hover:bg-black/60"
                         >
-                          {trains.map(t => <option key={t} value={t}>{t === 'All' ? 'All Units' : t}</option>)}
+                          {trains.map(t => <option key={t} value={t}>{t === 'All' ? 'Global Fleet' : t}</option>)}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" size={14} />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-cyan pointer-events-none" size={14} />
                       </div>
                     </div>
 
                     <div className="flex flex-col">
-                      <span className="filter-label">Railway Zone</span>
+                      <span className="filter-label">Sector Zone</span>
                       <div className="relative mt-1">
                         <select 
                           value={selectedZone}
                           onChange={(e) => setSelectedZone(e.target.value)}
-                          className="appearance-none bg-white border border-slate-200 rounded-lg px-4 py-2 pr-10 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent-cyan/20 transition-all cursor-pointer hover:border-slate-300"
+                          className="appearance-none bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 pr-10 text-xs font-black uppercase tracking-widest text-white focus:outline-none focus:ring-2 focus:ring-accent-cyan/40 transition-all cursor-pointer hover:bg-black/60"
                         >
                           {zones.map(z => <option key={z} value={z}>{z === 'All' ? 'All Sectors' : `${z} Zone`}</option>)}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" size={14} />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-accent-cyan pointer-events-none" size={14} />
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex-1 max-w-md flex items-center gap-6 pl-6 border-l border-slate-200">
+                  <div className="flex-1 max-w-md flex items-center gap-8 pl-8 border-l border-white/10">
                     <button 
                       onClick={() => setIsPlaying(!isPlaying)}
-                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isPlaying ? 'bg-accent-rose text-white shadow-lg shadow-rose-500/20' : 'bg-accent-cyan text-white shadow-lg shadow-blue-500/20'}`}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${isPlaying ? 'bg-accent-rose text-white shadow-[0_0_25px_rgba(255,45,85,0.4)]' : 'bg-accent-cyan text-black shadow-[0_0_25px_rgba(0,209,255,0.4)]'}`}
                     >
-                      {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+                      {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" />}
                     </button>
                     
                     <div className="flex-1 flex flex-col">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="metadata-xs font-bold text-text-muted">Temporal Window</span>
-                        <span className="metadata-xs font-bold text-accent-cyan">{timeFilter}:00 HRS</span>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="metadata-xs font-black text-accent-cyan">Temporal Scan</span>
+                        <span className="text-xs font-black font-mono text-white">{timeFilter}:00</span>
                       </div>
-                      <input 
-                        type="range" 
-                        min="0" 
-                        max="24" 
-                        value={timeFilter}
-                        onChange={(e) => setTimeFilter(parseInt(e.target.value))}
-                        className="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-accent-cyan"
-                      />
+                      <div className="relative h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="absolute top-0 left-0 h-full bg-accent-cyan shadow-[0_0_10px_rgba(0,209,255,0.8)]"
+                          initial={false}
+                          animate={{ width: `${(timeFilter / 24) * 100}%` }}
+                        />
+                        <input 
+                          type="range" 
+                          min="0" 
+                          max="24" 
+                          value={timeFilter}
+                          onChange={(e) => setTimeFilter(parseInt(e.target.value))}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -342,7 +378,7 @@ def render_geospatial(df):
                     unit="min"
                     subtext="Avg network delay" 
                     icon={Clock} 
-                    gradient="from-slate-800 to-slate-900" 
+                    gradient="from-accent-cyan to-blue-600" 
                     trend={12}
                     trendDirection="up"
                   />
@@ -352,7 +388,7 @@ def render_geospatial(df):
                     unit="%"
                     subtext="On-time performance" 
                     icon={CheckCircle2} 
-                    gradient="from-emerald-600 to-emerald-700" 
+                    gradient="from-accent-cyan to-emerald-500" 
                     trend={5}
                     trendDirection="down"
                   />
@@ -361,14 +397,14 @@ def render_geospatial(df):
                     value={stats.worstStation?.split(' ')[0] || 'N/A'} 
                     subtext="Highest delay impact" 
                     icon={AlertTriangle} 
-                    gradient="from-amber-500 to-amber-600" 
+                    gradient="from-accent-amber to-orange-600" 
                   />
                   <MetricCard 
                     label="Peak Congestion" 
                     value={`${stats.peakHour}:00`} 
                     subtext="Traffic saturation" 
                     icon={TrendingDown} 
-                    gradient="from-blue-600 to-blue-700" 
+                    gradient="from-accent-violet to-purple-600" 
                   />
                 </div>
 
@@ -421,24 +457,82 @@ def render_geospatial(df):
                   <div className="col-span-12 lg:col-span-6">
                     <DelayLineChart data={cumulativeData} />
                   </div>
+
+                  {/* Advanced Operational Intelligence Section */}
+                  <div className="col-span-12 mt-16 mb-8">
+                    <div className="flex items-center gap-6">
+                      <div className="h-px flex-1 bg-white/10" />
+                      <h2 className="text-3xl font-black text-white uppercase tracking-[0.3em] px-6">Operational Intelligence</h2>
+                      <div className="h-px flex-1 bg-white/10" />
+                    </div>
+                  </div>
+
+                  <div className="col-span-12 lg:col-span-8">
+                    <TimeSeriesTrend data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-4">
+                    <ComparativePerformance data={cumulativeData} />
+                  </div>
+
+                  <div className="col-span-12 lg:col-span-6">
+                    <PredictiveForecast data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <RouteRadarComparison data={cumulativeData} />
+                  </div>
+
+                  {/* Network Dynamics & Predictive Analytics Section */}
+                  <div className="col-span-12 mt-16 mb-8">
+                    <div className="flex items-center gap-6">
+                      <div className="h-px flex-1 bg-white/10" />
+                      <h2 className="text-3xl font-black text-white uppercase tracking-[0.3em] px-6">Predictive Analytics</h2>
+                      <div className="h-px flex-1 bg-white/10" />
+                    </div>
+                  </div>
+
+                  <div className="col-span-12 lg:col-span-6">
+                    <DelayDistributionBox data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <CorrelationHeatmap data={cumulativeData} />
+                  </div>
+
+                  <div className="col-span-12 lg:col-span-4">
+                    <EventTimeline data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-8">
+                    <NetworkTopology data={cumulativeData} />
+                  </div>
+
+                  <div className="col-span-12 lg:col-span-6">
+                    <DelayPropagation data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <CapacityUtilization data={cumulativeData} />
+                  </div>
+
+                  <div className="col-span-12 lg:col-span-4">
+                    <StationLeaderboard data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-8">
+                    <DelayTreemap data={cumulativeData} />
+                  </div>
+
+                  <div className="col-span-12 lg:col-span-6">
+                    <PassengerImpactFunnel data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <ScheduleGantt data={cumulativeData} />
+                  </div>
                 </div>
 
                 {/* System Flow Diagram */}
-                <SystemFlow />
-
-                {/* Packed Bubble Chart (Emerging Topics Style) */}
-                <div className="mb-8">
-                  <PackedBubbleChart data={cumulativeData} />
+                <div className="glass-panel rounded-[2rem] p-8">
+                  <SystemFlow />
                 </div>
 
                 {/* Advanced 3D Analytics Grid */}
                 <div className="grid grid-cols-12 gap-6 mb-8">
-                  <div className="col-span-12 lg:col-span-6">
-                    <SpaceTimeCube data={cumulativeData} />
-                  </div>
-                  <div className="col-span-12 lg:col-span-6">
-                    <CongestionTowers data={cumulativeData} />
-                  </div>
                   <div className="col-span-12 lg:col-span-6">
                     <RadialDelayRose data={cumulativeData} />
                   </div>
@@ -447,39 +541,58 @@ def render_geospatial(df):
                   </div>
                 </div>
 
+                {/* Extra Advanced Analytics Grid */}
+                <div className="grid grid-cols-12 gap-6 mb-8">
+                  <div className="col-span-12 lg:col-span-6">
+                    <WeatherDelayTerrain data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <DelayFlowSankey data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <PerformanceParallel data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12 lg:col-span-6">
+                    <ZoneTimeRibbon data={cumulativeData} />
+                  </div>
+                  <div className="col-span-12">
+                    <DelaySunburst data={cumulativeData} />
+                  </div>
+                </div>
+
                 {/* Detailed Data Table (Limited to 50 rows) */}
                 <TrainDetailsTable data={data.slice(0, 50)} />
 
                 {/* Methodology Section */}
-                <div className="bg-white border border-slate-200 rounded-2xl p-10 shadow-card relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-8 opacity-5 text-text-primary rotate-12">
-                    <LayoutDashboard size={180} />
+                <div className="glass-panel rounded-[3rem] p-12 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-12 opacity-5 text-white rotate-12 pointer-events-none">
+                    <LayoutDashboard size={240} />
                   </div>
                   <div className="relative z-10">
-                    <h3 className="text-2xl font-bold text-text-primary mb-8 font-serif italic flex items-center gap-3">
-                      <Info className="text-accent-cyan" size={24} />
-                      Operational Intelligence Report
+                    <h3 className="text-3xl font-black text-white mb-12 uppercase tracking-[0.4em] flex items-center gap-4">
+                      <Info className="text-accent-cyan" size={32} />
+                      Operational Intelligence
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-                      <div className="space-y-4">
-                        <div className="w-10 h-1 bg-accent-cyan rounded-full" />
-                        <h4 className="metadata-xs font-bold text-text-primary">Temporal Propagation</h4>
-                        <p className="text-sm text-text-secondary leading-relaxed">
-                          Our analysis indicates that delays follow a non-linear propagation model. A single 10-minute disruption at a primary hub like <span className="font-bold text-text-primary">New Delhi Central</span> typically results in a cumulative 45-minute system-wide latency within a 4-hour window.
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
+                      <div className="space-y-6">
+                        <div className="w-12 h-1 bg-accent-cyan shadow-[0_0_10px_rgba(0,209,255,0.8)]" />
+                        <h4 className="metadata-xs font-black text-white">Temporal Propagation</h4>
+                        <p className="text-sm text-text-secondary leading-relaxed font-medium">
+                          Our analysis indicates that delays follow a non-linear propagation model. A single 10-minute disruption typically results in a cumulative 45-minute system-wide latency.
                         </p>
                       </div>
-                      <div className="space-y-4">
-                        <div className="w-10 h-1 bg-accent-amber rounded-full" />
-                        <h4 className="metadata-xs font-bold text-text-primary">Spatial Bottlenecks</h4>
-                        <p className="text-sm text-text-secondary leading-relaxed">
-                          3D spatial clustering reveals persistent "Delay Islands" in the <span className="font-bold text-text-primary">North-Eastern Corridor</span>. These are often correlated with infrastructure age and signal density rather than simple traffic volume.
+                      <div className="space-y-6">
+                        <div className="w-12 h-1 bg-accent-amber shadow-[0_0_10px_rgba(255,184,0,0.8)]" />
+                        <h4 className="metadata-xs font-black text-white">Spatial Bottlenecks</h4>
+                        <p className="text-sm text-text-secondary leading-relaxed font-medium">
+                          3D spatial clustering reveals persistent "Delay Islands" in the North-Eastern Corridor, often correlated with infrastructure age and signal density.
                         </p>
                       </div>
-                      <div className="space-y-4">
-                        <div className="w-10 h-1 bg-accent-rose rounded-full" />
-                        <h4 className="metadata-xs font-bold text-text-primary">Risk Mitigation</h4>
-                        <p className="text-sm text-text-secondary leading-relaxed">
-                          By utilizing the <span className="font-bold text-text-primary">Probability Model</span>, operators can identify 'Fat-Tail' events—rare but catastrophic delays—up to 90 minutes before they impact secondary zones.
+                      <div className="space-y-6">
+                        <div className="w-12 h-1 bg-accent-rose shadow-[0_0_10px_rgba(255,45,85,0.8)]" />
+                        <h4 className="metadata-xs font-black text-white">Risk Mitigation</h4>
+                        <p className="text-sm text-text-secondary leading-relaxed font-medium">
+                          By utilizing the Probability Model, operators can identify 'Fat-Tail' events—rare but catastrophic delays—up to 90 minutes before impact.
                         </p>
                       </div>
                     </div>
@@ -490,17 +603,26 @@ def render_geospatial(df):
           </AnimatePresence>
 
           {/* Footer */}
-          <footer className="mt-20 py-12 border-t border-slate-200">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
-                  <Train className="text-white" size={16} />
+          <footer className="mt-32 py-16 border-t border-white/5">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
+                  <Train className="text-accent-cyan" size={20} />
                 </div>
-                <span className="font-bold tracking-tight font-serif italic text-lg">RailTrack</span>
+                <span className="font-black tracking-tighter uppercase italic text-xl text-white">RailTrack <span className="text-accent-cyan">OS</span></span>
+              </div>
+              <div className="flex gap-8">
+                {['System Status', 'API Docs', 'Security', 'Privacy'].map(link => (
+                  <a key={link} href="#" className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted hover:text-accent-cyan transition-colors">{link}</a>
+                ))}
               </div>
             </div>
-            <div className="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center">
-              <p className="text-[10px] text-text-muted font-mono uppercase tracking-[0.2em]">© 2026 RailTrack Systems • Precision Operations Dashboard</p>
+            <div className="mt-16 pt-8 border-t border-white/5 flex justify-between items-center">
+              <p className="text-[9px] text-text-muted font-mono uppercase tracking-[0.3em] font-black">© 2026 RailTrack Systems • Precision Operations Interface v4.0.2</p>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
+                <span className="text-[9px] font-black text-accent-cyan uppercase tracking-widest">System Nominal</span>
+              </div>
             </div>
           </footer>
         </main>

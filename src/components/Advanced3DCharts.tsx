@@ -55,7 +55,7 @@ export const SpaceTimeCube = ({ data }: ChartProps) => {
           colorscale: 'Viridis',
         },
         name: trainPoints[0]?.Train_Name,
-        hovertemplate: '<b>%{text}</b><br>Lat: %{y:.2f}<br>Lng: %{x:.2f}<br>Time: %{z:.2f}h<br>Delay: %{marker.color}m<extra></extra>',
+        hovertemplate: '<b>%{text}</b><br>Lat: %{y:.4f}<br>Lng: %{x:.4f}<br>Time: %{z:.2f}h<br>Delay: %{marker.color} min<extra></extra>',
         text: trainPoints.map(d => d.Station_Name)
       };
     });
@@ -107,7 +107,12 @@ export const SpaceTimeCube = ({ data }: ChartProps) => {
             margin: { l: 0, r: 0, t: 0, b: 0 },
             showlegend: false
           }}
-          config={{ responsive: true, displayModeBar: false }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: true,
+            scrollZoom: true,
+            displaylogo: false
+          }}
           className="w-full h-full"
         />
       </div>
@@ -150,7 +155,7 @@ export const CongestionTowers = ({ data }: ChartProps) => {
         line: { width: 1, color: '#fff' }
       },
       text: binArray.map(b => b.name),
-      hovertemplate: '<b>%{text}</b><br>Total Delay: %{z}m<extra></extra>'
+      hovertemplate: '<b>%{text}</b><br>Lat: %{y:.4f}<br>Lng: %{x:.4f}<br>Total Delay: %{z} min<extra></extra>'
     }, {
       // Shadow projection on ground
       type: 'scatter3d',
@@ -195,7 +200,12 @@ export const CongestionTowers = ({ data }: ChartProps) => {
             margin: { l: 0, r: 0, t: 0, b: 0 },
             showlegend: false
           }}
-          config={{ responsive: true, displayModeBar: false }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: true,
+            scrollZoom: true,
+            displaylogo: false
+          }}
           className="w-full h-full"
         />
       </div>
@@ -238,7 +248,7 @@ export const RadialDelayRose = ({ data }: ChartProps) => {
         colorscale: 'Turbo',
         opacity: 0.8
       },
-      hovertemplate: 'Zone: %{x}<br>Cause: %{y}<br>Delay: %{z}m<extra></extra>'
+      hovertemplate: '<b>Zone:</b> %{x}<br><b>Cause:</b> %{y}<br><b>Total Delay:</b> %{z} min<extra></extra>'
     }];
   }, [data]);
 
@@ -268,7 +278,12 @@ export const RadialDelayRose = ({ data }: ChartProps) => {
             },
             margin: { l: 0, r: 0, t: 0, b: 0 }
           }}
-          config={{ responsive: true, displayModeBar: false }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: true,
+            scrollZoom: true,
+            displaylogo: false
+          }}
           className="w-full h-full"
         />
       </div>
@@ -321,7 +336,7 @@ export const VelocityVortex = ({ data }: ChartProps) => {
               opacity: 0.6
             },
             text: plotData.map(d => d.name),
-            hovertemplate: 'Speed: %{y:.1f} km/h<br>Dist: %{x:.1f} km<br>Delay: %{z} min<extra></extra>'
+            hovertemplate: '<b>%{text}</b><br>Speed: %{y:.1f} km/h<br>Dist: %{x:.1f} km<br>Delay: %{z} min<extra></extra>'
           }]}
           layout={{
             autosize: true,
@@ -335,7 +350,12 @@ export const VelocityVortex = ({ data }: ChartProps) => {
             },
             margin: { l: 0, r: 0, t: 0, b: 0 }
           }}
-          config={{ responsive: true, displayModeBar: false }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: true,
+            scrollZoom: true,
+            displaylogo: false
+          }}
           className="w-full h-full"
         />
       </div>

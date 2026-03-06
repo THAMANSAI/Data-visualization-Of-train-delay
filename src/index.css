@@ -6,64 +6,90 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --font-serif: "Georgia", serif;
 
-  /* Human-Crafted Palette */
-  --color-bg-primary: #F5F5F3;    /* Warm Paper */
-  --color-bg-secondary: #EBEBE9;  /* Slightly darker paper */
-  --color-card-bg: #FFFFFF;
-  --color-text-primary: #141414;  /* Deep Ink */
-  --color-text-secondary: #4A4A4A;
-  --color-text-muted: #8C8C8C;
+  /* Futuristic Dark Palette */
+  --color-bg-primary: #050505;    /* Deep Space */
+  --color-bg-secondary: #0A0A0C;  /* Slightly lighter dark */
+  --color-card-bg: rgba(20, 20, 25, 0.7);
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #A1A1AA;
+  --color-text-muted: #71717A;
   
-  --color-accent-cyan: #007AFF;   /* Precision Blue */
-  --color-accent-rose: #FF3B30;   /* Warning Red */
-  --color-accent-amber: #FF9500;  /* Caution Orange */
-  --color-accent-emerald: #34C759; /* Success Green */
-  --color-accent-violet: #5856D6;  /* System Violet */
+  --color-accent-cyan: #00D1FF;   /* Neon Cyan */
+  --color-accent-rose: #FF2D55;   /* Neon Rose */
+  --color-accent-amber: #FFB800;  /* Neon Amber */
+  --color-accent-emerald: #00F0FF; /* Updated to Cyan for futuristic feel */
+  --color-accent-violet: #BF5AF2;  /* Neon Violet */
 
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
-  --shadow-card-hover: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.05);
-  --shadow-filter: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 20px rgba(0, 209, 255, 0.3);
 }
 
 @layer base {
   body {
     @apply bg-bg-primary text-text-primary font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(91, 33, 182, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0, 209, 255, 0.05) 0%, transparent 50%);
+    background-attachment: fixed;
   }
 
   /* Custom Scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
   }
 }
 
 @layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-card;
+  }
+
+  .glass-panel-hover {
+    @apply hover:bg-white/10 hover:border-white/20 transition-all duration-500;
+  }
+
+  .neon-glow {
+    @apply shadow-[0_0_15px_rgba(0,209,255,0.2)];
+  }
+
   .metric-value {
-    @apply text-[32px] font-bold tracking-[-0.02em] leading-tight font-mono;
+    @apply text-[36px] font-black tracking-[-0.03em] leading-tight font-mono text-white;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
   }
   
   .label-sm {
-    @apply text-[14px] font-medium text-text-secondary font-sans;
+    @apply text-[13px] font-semibold text-text-secondary font-sans uppercase tracking-wider;
   }
   
   .metadata-xs {
-    @apply text-[10px] font-bold uppercase tracking-[0.1em] text-text-muted font-mono;
+    @apply text-[10px] font-black uppercase tracking-[0.2em] text-text-muted font-mono;
   }
   
   .filter-label {
-    @apply text-[12px] font-serif italic text-text-muted;
+    @apply text-[11px] font-bold uppercase tracking-widest text-text-muted mb-2 block;
   }
 
-  /* Visible Grid Pattern */
+  /* Futuristic Grid Pattern */
   .grid-pattern {
-    background-image: radial-gradient(circle, #000000 1px, transparent 1px);
-    background-size: 24px 24px;
-    opacity: 0.03;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .animate-spin-slow {
+    animation: spin 8s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 }

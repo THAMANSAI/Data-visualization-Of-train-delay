@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import Plot from 'react-plotly.js';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { X, TrendingUp, Clock, CheckCircle2, MapPin, BarChart3, Play, Pause } from 'lucide-react';
+import { X, TrendingUp, Clock, CheckCircle2, MapPin, BarChart3, Play, Pause, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { TrainData } from '../data';
 
@@ -30,26 +30,40 @@ export const TimelineDelayChart = ({ data }: ChartProps) => {
   });
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full">
-      <h3 className="text-text-primary font-bold text-lg mb-1">Timeline Delay Visualization</h3>
-      <p className="text-xs text-text-secondary mb-4">Tracks delay progression over time for each train journey.</p>
-      <Plot
-        data={traces as any}
-        layout={{
-          autosize: true,
-          height: 400,
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#64748b', family: 'Inter, sans-serif' },
-          margin: { l: 40, r: 20, t: 20, b: 40 },
-          xaxis: { gridcolor: '#f1f5f9', zeroline: false },
-          yaxis: { gridcolor: '#f1f5f9', zeroline: false, title: 'Delay (min)' },
-          legend: { orientation: 'h', y: -0.2 },
-          hovermode: 'closest'
-        }}
-        config={{ responsive: true, displayModeBar: false }}
-        className="w-full"
-      />
+    <div className="glass-panel rounded-3xl p-8 h-full relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+        <TrendingUp size={120} />
+      </div>
+      
+      <div className="relative z-10">
+        <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Temporal Latency</h3>
+        <p className="metadata-xs text-text-secondary mt-1 mb-8">Delay progression telemetry per unit journey.</p>
+      </div>
+
+      <div className="flex-1 relative z-10">
+        <Plot
+          data={traces as any}
+          layout={{
+            autosize: true,
+            height: 400,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: 'rgba(255,255,255,0.5)', family: 'Inter, sans-serif' },
+            margin: { l: 40, r: 20, t: 20, b: 40 },
+            xaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false },
+            yaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false, title: 'Delay (min)' },
+            legend: { orientation: 'h', y: -0.2, font: { size: 10 } },
+            hovermode: 'closest'
+          }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: false,
+            scrollZoom: true,
+            displaylogo: false
+          }}
+          className="w-full"
+        />
+      </div>
     </div>
   );
 };
@@ -62,34 +76,48 @@ export const StationPerformanceChart = ({ data }: ChartProps) => {
   });
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full">
-      <h3 className="text-text-primary font-bold text-lg mb-1">Station Performance Analysis</h3>
-      <p className="text-xs text-text-secondary mb-4">Average delay minutes recorded at each station.</p>
-      <Plot
-        data={[{
-          x: stations,
-          y: avgDelays,
-          type: 'bar',
-          marker: {
-            color: avgDelays,
-            colorscale: 'Viridis',
-            line: { width: 0 }
-          },
-          hovertemplate: '<b>%{x}</b><br>Avg Delay: %{y} min<extra></extra>'
-        }]}
-        layout={{
-          autosize: true,
-          height: 400,
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#64748b', family: 'Inter, sans-serif' },
-          margin: { l: 40, r: 20, t: 20, b: 80 },
-          xaxis: { gridcolor: '#f1f5f9', zeroline: false, tickangle: -45 },
-          yaxis: { gridcolor: '#f1f5f9', zeroline: false, title: 'Avg Delay (min)' }
-        }}
-        config={{ responsive: true, displayModeBar: false }}
-        className="w-full"
-      />
+    <div className="glass-panel rounded-3xl p-8 h-full relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+        <BarChart3 size={120} />
+      </div>
+      
+      <div className="relative z-10">
+        <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Node Efficiency</h3>
+        <p className="metadata-xs text-text-secondary mt-1 mb-8">Average variance recorded at each station node.</p>
+      </div>
+
+      <div className="flex-1 relative z-10">
+        <Plot
+          data={[{
+            x: stations,
+            y: avgDelays,
+            type: 'bar',
+            marker: {
+              color: avgDelays,
+              colorscale: 'Viridis',
+              line: { width: 0 }
+            },
+            hovertemplate: '<b>%{x}</b><br>Avg Delay: %{y} min<extra></extra>'
+          }]}
+          layout={{
+            autosize: true,
+            height: 400,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: 'rgba(255,255,255,0.5)', family: 'Inter, sans-serif' },
+            margin: { l: 40, r: 20, t: 20, b: 80 },
+            xaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false, tickangle: -45 },
+            yaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false, title: 'Avg Delay (min)' }
+          }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: false,
+            scrollZoom: true,
+            displaylogo: false
+          }}
+          className="w-full"
+        />
+      </div>
     </div>
   );
 };
@@ -98,19 +126,19 @@ export const DelayDistributionChart = ({ data }: ChartProps) => {
   const delays = data.map(d => d.Delay_Minutes);
   
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full">
+    <div className="glass-panel rounded-3xl p-6 h-full">
       <div className="flex justify-between items-center mb-1">
-        <h3 className="text-text-primary font-bold text-lg">Delay Distribution & Density</h3>
-        <span className="metadata-xs font-bold text-accent-cyan bg-accent-cyan/10 px-2 py-1 rounded">PROBABILITY MODEL</span>
+        <h3 className="text-white font-black text-lg uppercase tracking-widest italic">Delay Density</h3>
+        <span className="metadata-xs font-black text-accent-cyan bg-accent-cyan/10 px-2 py-1 rounded border border-accent-cyan/20">PROBABILITY MODEL</span>
       </div>
-      <p className="text-xs text-text-secondary mb-4">Frequency of delay durations across all trains.</p>
+      <p className="metadata-xs text-text-secondary mb-6">Frequency of delay durations across all trains.</p>
       <Plot
         data={[
           {
             x: delays,
             type: 'histogram',
             name: 'Frequency',
-            marker: { color: 'rgba(59, 130, 246, 0.5)' },
+            marker: { color: 'rgba(0, 209, 255, 0.3)' },
             nbinsx: 30,
             histnorm: 'probability density'
           },
@@ -119,8 +147,8 @@ export const DelayDistributionChart = ({ data }: ChartProps) => {
             type: 'violin',
             name: 'Density Curve',
             side: 'positive',
-            line: { color: '#2563eb' },
-            fillcolor: 'rgba(37, 99, 235, 0.1)',
+            line: { color: '#00D1FF' },
+            fillcolor: 'rgba(0, 209, 255, 0.1)',
             points: false,
             box: { visible: true },
             meanline: { visible: true }
@@ -131,14 +159,19 @@ export const DelayDistributionChart = ({ data }: ChartProps) => {
           height: 400,
           paper_bgcolor: 'rgba(0,0,0,0)',
           plot_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#64748b', family: 'Inter, sans-serif' },
+          font: { color: 'rgba(255,255,255,0.5)', family: 'Inter, sans-serif' },
           margin: { l: 50, r: 20, t: 20, b: 40 },
-          yaxis: { gridcolor: '#f1f5f9', zeroline: false, title: 'Density' },
-          xaxis: { gridcolor: '#f1f5f9', zeroline: false, title: 'Delay (min)' },
-          legend: { orientation: 'h', y: -0.2 },
+          yaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false, title: 'Density' },
+          xaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false, title: 'Delay (min)' },
+          legend: { orientation: 'h', y: -0.2, font: { size: 10 } },
           barmode: 'overlay'
         }}
-        config={{ responsive: true, displayModeBar: false }}
+        config={{ 
+          responsive: true, 
+          displayModeBar: false,
+          scrollZoom: true,
+          displaylogo: false
+        }}
         className="w-full"
       />
     </div>
@@ -175,15 +208,15 @@ export const ThreeDScatterClusters = ({ data }: ChartProps) => {
   }, []);
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full group">
+    <div className="glass-panel rounded-3xl p-6 h-full group">
       <div className="flex justify-between items-center mb-1">
-        <h3 className="text-text-primary font-bold text-lg">3D Delay Clusters</h3>
+        <h3 className="text-white font-black text-lg uppercase tracking-widest italic">Spatial Clusters</h3>
         <div className="flex gap-2">
-          <span className="metadata-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-text-secondary uppercase tracking-wider">Spatial Analysis</span>
-          <span className="metadata-xs font-bold px-2 py-0.5 rounded bg-blue-100 text-[#3B82F6] uppercase tracking-wider">Dynamic View</span>
+          <span className="metadata-xs font-black px-2 py-0.5 rounded bg-white/5 text-text-secondary uppercase tracking-widest border border-white/10">Spatial</span>
+          <span className="metadata-xs font-black px-2 py-0.5 rounded bg-accent-cyan/10 text-accent-cyan uppercase tracking-widest border border-accent-cyan/20">Dynamic</span>
         </div>
       </div>
-      <p className="text-xs text-text-secondary mb-4">Clustering of delay events based on duration and time.</p>
+      <p className="metadata-xs text-text-secondary mb-6">Clustering of delay events based on duration and time.</p>
       <Plot
         data={[{
           x: data.map(d => d.Lat),
@@ -205,11 +238,11 @@ export const ThreeDScatterClusters = ({ data }: ChartProps) => {
           autosize: true,
           height: 500,
           paper_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#64748b', family: 'Inter, sans-serif' },
+          font: { color: 'rgba(255,255,255,0.5)', family: 'Inter, sans-serif' },
           scene: {
-            xaxis: { title: 'Latitude', gridcolor: '#f1f5f9', showbackground: true, backgroundcolor: '#f8fafc' },
-            yaxis: { title: 'Hour of Day', gridcolor: '#f1f5f9', showbackground: true, backgroundcolor: '#f8fafc' },
-            zaxis: { title: 'Delay (min)', gridcolor: '#f1f5f9', showbackground: true, backgroundcolor: '#f8fafc' },
+            xaxis: { title: 'Latitude', gridcolor: 'rgba(255,255,255,0.05)', showbackground: false },
+            yaxis: { title: 'Hour', gridcolor: 'rgba(255,255,255,0.05)', showbackground: false },
+            zaxis: { title: 'Delay', gridcolor: 'rgba(255,255,255,0.05)', showbackground: false },
             camera: camera,
             aspectmode: 'manual',
             aspectratio: { x: 1, y: 1, z: 0.8 }
@@ -222,7 +255,12 @@ export const ThreeDScatterClusters = ({ data }: ChartProps) => {
             lastInteractionRef.current = Date.now();
           }
         }}
-        config={{ responsive: true, displayModeBar: false }}
+        config={{ 
+          responsive: true, 
+          displayModeBar: false,
+          scrollZoom: true,
+          displaylogo: false
+        }}
         className="w-full"
       />
     </div>
@@ -251,39 +289,39 @@ export const StationRankingTable = ({ data }: ChartProps) => {
   }, [data]);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-card h-full overflow-hidden flex flex-col">
-      <div className="p-5 border-b border-slate-100 bg-slate-50/50">
-        <h3 className="text-text-primary font-bold text-lg font-serif italic">Node Performance Audit</h3>
-        <p className="metadata-xs text-text-muted mt-1">Station-level latency & reliability metrics. Top stations ranked by accumulated delay minutes.</p>
+    <div className="glass-panel rounded-3xl h-full overflow-hidden flex flex-col">
+      <div className="p-6 border-b border-white/5 bg-white/5">
+        <h3 className="text-white font-black text-lg uppercase tracking-widest italic">Node Performance</h3>
+        <p className="metadata-xs text-text-secondary mt-1">Station-level latency & reliability metrics.</p>
       </div>
       
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50/30">
-              <th className="px-5 py-3 metadata-xs text-text-muted border-b border-slate-100">Station</th>
-              <th className="px-5 py-3 metadata-xs text-text-muted border-b border-slate-100 text-right">Latency</th>
-              <th className="px-5 py-3 metadata-xs text-text-muted border-b border-slate-100 text-right">Reliability</th>
+            <tr className="bg-white/5">
+              <th className="px-6 py-4 metadata-xs text-accent-cyan border-b border-white/10 uppercase tracking-widest">Station</th>
+              <th className="px-6 py-4 metadata-xs text-accent-cyan border-b border-white/10 text-right uppercase tracking-widest">Latency</th>
+              <th className="px-6 py-4 metadata-xs text-accent-cyan border-b border-white/10 text-right uppercase tracking-widest">Reliability</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50">
+          <tbody className="divide-y divide-white/5">
             {ranking.map((s) => (
-              <tr key={s.name} className="group hover:bg-text-primary hover:text-white transition-all duration-300 cursor-pointer">
-                <td className="px-5 py-4">
-                  <div className="text-sm font-bold tracking-tight group-hover:text-white">{s.name}</div>
-                  <div className="text-[10px] opacity-40 group-hover:opacity-100 uppercase tracking-widest">Station Node</div>
+              <tr key={s.name} className="group hover:bg-white/5 transition-all duration-300 cursor-pointer">
+                <td className="px-6 py-5">
+                  <div className="text-sm font-black tracking-tight text-white group-hover:text-accent-cyan transition-colors">{s.name}</div>
+                  <div className="text-[9px] text-text-muted uppercase tracking-widest font-bold">Station Node</div>
                 </td>
-                <td className="px-5 py-4 text-right">
-                  <span className={`font-mono font-bold ${s.avgDelay > 30 ? 'text-accent-rose group-hover:text-white' : 'text-text-primary group-hover:text-white'}`}>
+                <td className="px-6 py-5 text-right">
+                  <span className={`font-mono font-black ${s.avgDelay > 30 ? 'text-accent-rose' : 'text-white'}`}>
                     {s.avgDelay}m
                   </span>
                 </td>
-                <td className="px-5 py-4 text-right">
+                <td className="px-6 py-5 text-right">
                   <div className="flex flex-col items-end">
-                    <span className="font-mono text-xs font-bold group-hover:text-white">{s.onTimeRate}%</span>
-                    <div className="w-16 h-1 bg-slate-100 rounded-full mt-1 overflow-hidden group-hover:bg-white/20">
+                    <span className="font-mono text-xs font-black text-white">{s.onTimeRate}%</span>
+                    <div className="w-20 h-1 bg-white/5 rounded-full mt-2 overflow-hidden">
                       <div 
-                        className={`h-full transition-all duration-500 group-hover:bg-white ${s.onTimeRate > 80 ? 'bg-accent-emerald' : s.onTimeRate > 50 ? 'bg-accent-amber' : 'bg-accent-rose'}`} 
+                        className={`h-full transition-all duration-700 ${s.onTimeRate > 80 ? 'bg-accent-cyan shadow-[0_0_8px_rgba(0,209,255,0.5)]' : s.onTimeRate > 50 ? 'bg-accent-amber' : 'bg-accent-rose'}`} 
                         style={{ width: `${s.onTimeRate}%` }} 
                       />
                     </div>
@@ -344,19 +382,19 @@ export const ThreeDDelaySurface = ({ data }: ChartProps) => {
   }, []);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-card h-full group relative overflow-hidden">
+    <div className="glass-panel rounded-3xl p-8 h-full group relative overflow-hidden">
       <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-        <BarChart3 size={100} />
+        <BarChart3 size={120} />
       </div>
       
-      <div className="flex justify-between items-start mb-6 relative z-10">
+      <div className="flex justify-between items-start mb-8 relative z-10">
         <div>
-          <h3 className="text-text-primary font-bold text-lg font-serif italic">3D Delay Surface Model</h3>
-          <p className="metadata-xs text-text-muted mt-0.5">Spatiotemporal latency distribution. Visualizes delay intensity across different train routes.</p>
+          <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Delay Surface Model</h3>
+          <p className="metadata-xs text-text-secondary mt-1">Spatiotemporal latency distribution mesh.</p>
         </div>
         <div className="flex gap-2">
-          <span className="metadata-xs font-bold px-2 py-1 rounded-md bg-slate-100 text-text-secondary border border-slate-200">GPU Accelerated</span>
-          <span className="metadata-xs font-bold px-2 py-1 rounded-md bg-emerald-50 text-accent-emerald border border-emerald-100">Live Render</span>
+          <span className="metadata-xs font-black px-2 py-1 rounded-md bg-white/5 text-text-secondary border border-white/10 uppercase tracking-widest">GPU Core</span>
+          <span className="metadata-xs font-black px-2 py-1 rounded-md bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20 uppercase tracking-widest">Live</span>
         </div>
       </div>
       <Plot
@@ -374,11 +412,11 @@ export const ThreeDDelaySurface = ({ data }: ChartProps) => {
           autosize: true,
           height: 400,
           paper_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#64748b', family: 'Inter, sans-serif' },
+          font: { color: 'rgba(255,255,255,0.5)', family: 'Inter, sans-serif' },
           scene: {
-            xaxis: { title: 'Station Index', gridcolor: '#f1f5f9', showbackground: false },
-            yaxis: { title: 'Hour', gridcolor: '#f1f5f9', showbackground: false },
-            zaxis: { title: 'Delay', gridcolor: '#f1f5f9', showbackground: false },
+            xaxis: { title: 'Node', gridcolor: 'rgba(255,255,255,0.05)', showbackground: false },
+            yaxis: { title: 'Hour', gridcolor: 'rgba(255,255,255,0.05)', showbackground: false },
+            zaxis: { title: 'Delay', gridcolor: 'rgba(255,255,255,0.05)', showbackground: false },
             camera: camera,
             aspectmode: 'manual',
             aspectratio: { x: 1, y: 1, z: 0.5 }
@@ -399,19 +437,19 @@ export const ThreeDDelaySurface = ({ data }: ChartProps) => {
         className="w-full"
       />
       
-      <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
-        <div className="flex gap-4">
+      <div className="mt-8 flex items-center justify-between border-t border-white/5 pt-8">
+        <div className="flex gap-8">
           <div className="flex flex-col">
-            <span className="metadata-xs text-text-muted">Resolution</span>
-            <span className="text-xs font-bold font-mono">64x24 Grid</span>
+            <span className="metadata-xs text-text-muted uppercase tracking-widest">Resolution</span>
+            <span className="text-xs font-black font-mono text-white">64x24 GRID</span>
           </div>
           <div className="flex flex-col">
-            <span className="metadata-xs text-text-muted">Algorithm</span>
-            <span className="text-xs font-bold font-mono">Bilinear Interp.</span>
+            <span className="metadata-xs text-text-muted uppercase tracking-widest">Algorithm</span>
+            <span className="text-xs font-black font-mono text-white">BILINEAR</span>
           </div>
         </div>
-        <button className="text-[10px] font-bold uppercase tracking-widest text-accent-cyan hover:underline">
-          Export Mesh Data
+        <button className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-cyan hover:text-white transition-colors">
+          Export Mesh
         </button>
       </div>
     </div>
@@ -431,31 +469,46 @@ export const StationPerformanceHeatmap = ({ data }: ChartProps) => {
   });
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full">
-      <h3 className="text-text-primary font-bold text-lg mb-1">Station Performance Heatmap</h3>
-      <p className="text-xs text-text-secondary mb-4">Heatmap showing delay intensity across stations and trains.</p>
-      <Plot
-        data={[{
-          z: zData,
-          x: stations,
-          y: zones,
-          type: 'heatmap',
-          colorscale: 'YlOrRd',
-          showscale: true,
-          hovertemplate: 'Zone: %{y}<br>Station: %{x}<br>Avg Delay: %{z:.1f}m<extra></extra>'
-        }]}
-        layout={{
-          autosize: true,
-          height: 400,
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#64748b', family: 'Inter, sans-serif' },
-          margin: { l: 80, r: 20, t: 20, b: 100 },
-          xaxis: { tickangle: -45 }
-        }}
-        config={{ responsive: true, displayModeBar: false }}
-        className="w-full"
-      />
+    <div className="glass-panel rounded-3xl p-8 h-full relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+        <Activity size={120} />
+      </div>
+      
+      <div className="relative z-10">
+        <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Regional Intensity</h3>
+        <p className="metadata-xs text-text-secondary mt-1 mb-8">Heatmap showing delay intensity across zones and nodes.</p>
+      </div>
+
+      <div className="flex-1 relative z-10">
+        <Plot
+          data={[{
+            z: zData,
+            x: stations,
+            y: zones,
+            type: 'heatmap',
+            colorscale: 'YlOrRd',
+            showscale: true,
+            hovertemplate: 'Zone: %{y}<br>Station: %{x}<br>Avg Delay: %{z:.1f} min<extra></extra>'
+          }]}
+          layout={{
+            autosize: true,
+            height: 400,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: 'rgba(255,255,255,0.5)', family: 'Inter, sans-serif' },
+            margin: { l: 80, r: 20, t: 20, b: 100 },
+            xaxis: { tickangle: -45, gridcolor: 'rgba(255,255,255,0.05)' },
+            yaxis: { gridcolor: 'rgba(255,255,255,0.05)' }
+          }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: false,
+            scrollZoom: true,
+            displaylogo: false
+          }}
+          className="w-full"
+        />
+      </div>
     </div>
   );
 };
@@ -507,24 +560,24 @@ export const GeographicDelayMap = ({ data }: ChartProps) => {
   }, [selectedStation, data, stationAgg]);
 
   const getColor = (avgDelay: number) => {
-    if (avgDelay < 15) return '#10b981';
-    if (avgDelay < 45) return '#f59e0b';
-    return '#ef4444';
+    if (avgDelay < 15) return '#00D1FF';
+    if (avgDelay < 45) return '#FFB800';
+    return '#FF2D55';
   };
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full relative overflow-hidden">
+    <div className="glass-panel rounded-[2rem] p-8 h-full relative overflow-hidden">
       <div className="flex items-center justify-between mb-1">
-        <h3 className="text-text-primary font-bold text-lg">Geographical Delay Severity</h3>
-        <div className="flex gap-3 text-[10px] font-bold uppercase tracking-wider">
-          <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent-emerald"></span> Low</div>
-          <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent-amber"></span> Med</div>
-          <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent-rose"></span> High</div>
+        <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Geospatial Variance</h3>
+        <div className="flex gap-4 text-[9px] font-black uppercase tracking-[0.2em]">
+          <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-accent-cyan shadow-[0_0_8px_rgba(0,209,255,0.5)]"></span> Nominal</div>
+          <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-accent-amber shadow-[0_0_8px_rgba(255,184,0,0.5)]"></span> Warning</div>
+          <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-accent-rose shadow-[0_0_8px_rgba(255,45,85,0.5)]"></span> Critical</div>
         </div>
       </div>
-      <p className="text-xs text-text-secondary mb-4">Map view of stations colored by average delay severity.</p>
+      <p className="metadata-xs text-text-secondary mb-8">Map view of stations colored by average delay severity.</p>
       
-      <div className="relative h-[500px]">
+      <div className="relative h-[500px] rounded-2xl overflow-hidden border border-white/5">
         <Plot
           data={[{
             type: 'scattermapbox',
@@ -535,7 +588,7 @@ export const GeographicDelayMap = ({ data }: ChartProps) => {
               size: stationAgg.map((s: any) => 12 + (s.delay / s.count) * 0.3),
               color: stationAgg.map((s: any) => getColor(s.delay / s.count)),
               opacity: 0.85,
-              line: { width: 2, color: '#fff' }
+              line: { width: 0 }
             },
             text: stationAgg.map((s: any) => s.name),
             hoverinfo: 'text'
@@ -550,14 +603,19 @@ export const GeographicDelayMap = ({ data }: ChartProps) => {
             height: 500,
             paper_bgcolor: 'rgba(0,0,0,0)',
             mapbox: {
-              style: 'carto-positron',
+              style: 'dark',
               center: { lat: 20.5937, lon: 78.9629 },
               zoom: 3.5
             },
             margin: { l: 0, r: 0, t: 0, b: 0 },
             showlegend: false
           }}
-          config={{ responsive: true, displayModeBar: false }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: false,
+            scrollZoom: true,
+            displaylogo: false
+          }}
           className="w-full h-full"
         />
 
@@ -565,69 +623,69 @@ export const GeographicDelayMap = ({ data }: ChartProps) => {
         <AnimatePresence>
           {selectedStationData && (
             <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="absolute top-4 right-4 w-72 bg-white/95 backdrop-blur-md border border-slate-200 rounded-xl shadow-xl p-4 z-10"
+              initial={{ opacity: 0, x: 20, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 20, scale: 0.95 }}
+              className="absolute top-6 right-6 w-80 glass-panel border border-white/20 rounded-3xl shadow-2xl p-6 z-10 backdrop-blur-2xl"
             >
               <button 
                 onClick={() => setSelectedStation(null)}
-                className="absolute top-2 right-2 p-1 hover:bg-slate-100 rounded-full transition-colors"
+                className="absolute top-4 right-4 p-1.5 hover:bg-white/10 rounded-full transition-colors"
               >
-                <X className="w-4 h-4 text-slate-400" />
+                <X className="w-4 h-4 text-white/40" />
               </button>
               
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-2 bg-slate-100 rounded-lg">
-                  <MapPin className="w-4 h-4 text-slate-600" />
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2.5 bg-accent-cyan/10 rounded-xl border border-accent-cyan/20">
+                  <MapPin className="w-5 h-5 text-accent-cyan" />
                 </div>
-                <h4 className="font-bold text-slate-900 truncate pr-6">{selectedStationData.name}</h4>
+                <h4 className="font-black text-white uppercase tracking-widest truncate pr-8">{selectedStationData.name}</h4>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="p-3 bg-slate-50 rounded-lg">
-                  <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500 uppercase mb-1">
-                    <Clock className="w-3 h-3" /> Avg Delay
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                  <div className="flex items-center gap-2 text-[9px] font-black text-text-secondary uppercase tracking-widest mb-1.5">
+                    <Clock className="w-3 h-3" /> Latency
                   </div>
-                  <div className="text-xl font-bold text-slate-900">{selectedStationData.avgDelay}m</div>
+                  <div className="text-2xl font-black text-white font-mono">{selectedStationData.avgDelay}m</div>
                 </div>
-                <div className="p-3 bg-slate-50 rounded-lg">
-                  <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500 uppercase mb-1">
-                    <CheckCircle2 className="w-3 h-3" /> On-Time
+                <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                  <div className="flex items-center gap-2 text-[9px] font-black text-text-secondary uppercase tracking-widest mb-1.5">
+                    <CheckCircle2 className="w-3 h-3" /> Reliability
                   </div>
-                  <div className="text-xl font-bold text-slate-900">{selectedStationData.onTimeRate}%</div>
+                  <div className="text-2xl font-black text-white font-mono">{selectedStationData.onTimeRate}%</div>
                 </div>
               </div>
 
-              <div className="mb-2">
-                <div className="flex items-center gap-1 text-[10px] font-bold text-slate-500 uppercase mb-2">
-                  <TrendingUp className="w-3 h-3" /> 24h Delay Trend
+              <div className="mb-4">
+                <div className="flex items-center gap-2 text-[9px] font-black text-text-secondary uppercase tracking-widest mb-4">
+                  <TrendingUp className="w-3 h-3" /> 24h Variance Trend
                 </div>
-                <div className="h-24 w-full">
+                <div className="h-28 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={selectedStationData.trend}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                       <XAxis dataKey="hour" hide />
                       <YAxis hide domain={[0, 'auto']} />
                       <Tooltip 
-                        contentStyle={{ fontSize: '10px', borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                        labelStyle={{ fontWeight: 'bold' }}
+                        contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)' }}
+                        itemStyle={{ color: '#00D1FF', fontWeight: 900, fontSize: '10px', textTransform: 'uppercase' }}
+                        labelStyle={{ display: 'none' }}
                       />
                       <Line 
                         type="monotone" 
                         dataKey="delay" 
-                        stroke="#6366f1" 
-                        strokeWidth={2} 
+                        stroke="#00D1FF" 
+                        strokeWidth={3} 
                         dot={false}
-                        activeDot={{ r: 4 }}
+                        activeDot={{ r: 4, fill: '#fff', strokeWidth: 0 }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
               </div>
               
-              <div className="text-[10px] text-slate-400 italic text-center">
-                Based on {selectedStationData.count} recorded arrivals
+              <div className="text-[9px] text-text-muted font-black uppercase tracking-widest text-center opacity-40">
+                Telemetry based on {selectedStationData.count} units
               </div>
             </motion.div>
           )}
@@ -649,37 +707,52 @@ export const DelayBoxPlot = ({ data }: ChartProps) => {
         boxpoints: 'all',
         jitter: 0.3,
         pointpos: -1.8,
-        marker: { size: 2 },
-        line: { width: 1 }
+        marker: { size: 2, color: 'rgba(255,255,255,0.2)' },
+        line: { width: 1.5, color: '#00D1FF' },
+        fillcolor: 'rgba(0, 209, 255, 0.1)'
       };
     });
   }, [data]);
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full">
-      <h3 className="text-text-primary font-bold text-lg mb-1">Delay Variability by Train</h3>
-      <p className="text-xs text-text-secondary mb-4">Box plot showing the spread of delay minutes for each train.</p>
-      <Plot
-        data={plotData as any}
-        layout={{
-          autosize: true,
-          height: 400,
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          plot_bgcolor: 'rgba(0,0,0,0)',
-          font: { color: '#64748b', family: 'Inter, sans-serif' },
-          margin: { l: 40, r: 20, t: 20, b: 80 },
-          xaxis: { 
-            gridcolor: '#f1f5f9', 
-            zeroline: false,
-            tickangle: -45
-          },
-          yaxis: { gridcolor: '#f1f5f9', zeroline: false, title: 'Delay (min)' },
-          showlegend: false,
-          hovermode: 'closest'
-        }}
-        config={{ responsive: true, displayModeBar: false }}
-        className="w-full"
-      />
+    <div className="glass-panel rounded-3xl p-8 h-full relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+        <BarChart3 size={120} />
+      </div>
+      
+      <div className="relative z-10">
+        <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Unit Variability</h3>
+        <p className="metadata-xs text-text-secondary mt-1 mb-8">Statistical spread of delay minutes per train unit.</p>
+      </div>
+
+      <div className="flex-1 relative z-10">
+        <Plot
+          data={plotData as any}
+          layout={{
+            autosize: true,
+            height: 400,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: 'rgba(255,255,255,0.5)', family: 'Inter, sans-serif' },
+            margin: { l: 40, r: 20, t: 20, b: 80 },
+            xaxis: { 
+              gridcolor: 'rgba(255,255,255,0.05)', 
+              zeroline: false,
+              tickangle: -45
+            },
+            yaxis: { gridcolor: 'rgba(255,255,255,0.05)', zeroline: false, title: 'Delay (min)' },
+            showlegend: false,
+            hovermode: 'closest'
+          }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: false,
+            scrollZoom: true,
+            displaylogo: false
+          }}
+          className="w-full"
+        />
+      </div>
     </div>
   );
 };
@@ -705,26 +778,33 @@ export const DelayLineChart = ({ data }: ChartProps) => {
   }, [data]);
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full">
-      <h3 className="text-text-primary font-bold text-lg mb-1">Average Delay Trend (Hourly)</h3>
-      <p className="text-xs text-text-secondary mb-4">Trend of average delays aggregated by hour of the day.</p>
-      <div className="h-[400px] w-full">
+    <div className="glass-panel rounded-3xl p-8 h-full relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+        <Clock size={120} />
+      </div>
+      
+      <div className="relative z-10">
+        <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Hourly Variance Trend</h3>
+        <p className="metadata-xs text-text-secondary mt-1 mb-8">Aggregate network latency across 24h cycle.</p>
+      </div>
+
+      <div className="h-[400px] w-full relative z-10">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-            <XAxis dataKey="hour" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} unit=" min" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+            <XAxis dataKey="hour" stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} axisLine={false} />
+            <YAxis stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} axisLine={false} unit="m" />
             <Tooltip 
-              contentStyle={{ backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-              itemStyle={{ color: '#1e293b', fontWeight: 600 }}
-              cursor={{ stroke: '#cbd5e1', strokeWidth: 1 }}
+              contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)' }}
+              itemStyle={{ color: '#BF5AF2', fontWeight: 900, fontSize: '10px', textTransform: 'uppercase' }}
+              cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1 }}
             />
             <Line 
               type="monotone" 
               dataKey="avgDelay" 
-              stroke="#8b5cf6" 
-              strokeWidth={3} 
-              dot={{ r: 4, fill: '#8b5cf6', strokeWidth: 2, stroke: '#fff' }}
+              stroke="#BF5AF2" 
+              strokeWidth={4} 
+              dot={{ r: 4, fill: '#BF5AF2', strokeWidth: 2, stroke: '#fff' }}
               activeDot={{ r: 6, strokeWidth: 0 }}
             />
           </LineChart>
@@ -903,18 +983,40 @@ export const AnimatedTrainMap = ({ data, currentTime = 720, isPlaying, onPlayPau
   };
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full flex flex-col relative">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-text-primary font-bold text-lg">Live Geospatial Movement</h3>
-        <div className="flex gap-3 metadata-xs font-bold uppercase tracking-wider">
-          <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> On Time</div>
-          <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500"></span> Minor Delay</div>
-          <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Major Delay</div>
-          <div className="flex items-center gap-1 ml-2"><span className="w-2 h-2 rounded-full bg-slate-300"></span> Stations</div>
+    <div className="glass-panel rounded-[2.5rem] p-8 h-full flex flex-col relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 relative z-10">
+        <div>
+          <h3 className="text-white font-black text-2xl uppercase tracking-widest italic">Live Telemetry Map</h3>
+          <p className="metadata-xs text-text-secondary mt-1">Real-time geospatial tracking of active fleet units.</p>
+        </div>
+        
+        <div className="flex items-center gap-4 bg-white/5 border border-white/10 p-2 rounded-2xl backdrop-blur-xl">
+          <button 
+            onClick={() => onPlayPause?.(!isPlaying)}
+            className="w-12 h-12 rounded-xl bg-accent-cyan text-black flex items-center justify-center hover:scale-105 transition-transform shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+          >
+            {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" className="ml-1" />}
+          </button>
+          
+          <div className="flex flex-col min-w-[120px]">
+            <span className="text-[10px] font-black text-accent-cyan uppercase tracking-widest mb-1">Mission Time</span>
+            <span className="text-2xl font-black text-white font-mono tracking-tighter">
+              {formatTime(currentTime)}
+            </span>
+          </div>
+          
+          <input 
+            type="range" 
+            min={0} 
+            max={1439} 
+            value={currentTime}
+            onChange={(e) => onTimeChange?.(parseInt(e.target.value))}
+            className="w-48 accent-accent-cyan bg-white/10 h-1.5 rounded-full appearance-none cursor-pointer"
+          />
         </div>
       </div>
       
-      <div className="flex-1 relative rounded-xl overflow-hidden border border-slate-100 mb-4">
+      <div className="flex-1 relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl mb-4">
         <Plot
           data={[
             ...routes.map(r => ({
@@ -933,7 +1035,7 @@ export const AnimatedTrainMap = ({ data, currentTime = 720, isPlaying, onPlayPau
               lat: stations.map((s: any) => s.lat),
               lon: stations.map((s: any) => s.lng),
               mode: 'markers',
-              marker: { size: 6, color: '#94a3b8', opacity: 0.7 },
+              marker: { size: 6, color: 'rgba(255,255,255,0.2)', opacity: 0.7 },
               text: stations.map((s: any) => s.hoverText),
               hoverinfo: 'text',
               name: 'Stations'
@@ -944,7 +1046,7 @@ export const AnimatedTrainMap = ({ data, currentTime = 720, isPlaying, onPlayPau
               lon: trainPositions.map((p: any) => p.lng),
               mode: 'markers',
               marker: { 
-                size: 12, 
+                size: 14, 
                 color: trainPositions.map((p: any) => p.color),
                 line: { width: 2, color: '#ffffff' }
               },
@@ -956,19 +1058,24 @@ export const AnimatedTrainMap = ({ data, currentTime = 720, isPlaying, onPlayPau
           ] as any}
           layout={{
             autosize: true,
-            height: 450,
+            height: 600,
             margin: { l: 0, r: 0, t: 0, b: 0 },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
             showlegend: false,
             hovermode: 'closest',
             mapbox: {
-              style: 'carto-positron',
+              style: 'dark',
               center: { lat: 20.5937, lon: 78.9629 },
-              zoom: 3.5
+              zoom: 4
             },
           }}
-          config={{ responsive: true, displayModeBar: false }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: false,
+            scrollZoom: true,
+            displaylogo: false
+          }}
           className="w-full h-full"
           onClick={(data) => {
             const point = data.points[0];
@@ -989,88 +1096,68 @@ export const AnimatedTrainMap = ({ data, currentTime = 720, isPlaying, onPlayPau
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              className="absolute top-4 right-4 bg-white/90 backdrop-blur-md border border-slate-200 p-4 rounded-xl shadow-lg z-10 w-64"
+              className="absolute bottom-8 left-8 right-8 md:right-auto md:w-96 glass-panel border border-white/20 rounded-3xl p-8 shadow-2xl backdrop-blur-3xl z-20"
             >
-              <div className="flex justify-between items-start mb-2">
-                <h4 className="font-bold text-slate-800 text-sm">{selectedTrainInfo.name}</h4>
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center">
+                    <TrendingUp className="text-accent-cyan" size={28} />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-black text-white uppercase tracking-widest italic">{selectedTrainInfo.name}</h4>
+                    <p className="metadata-xs text-accent-cyan font-mono">{selectedTrainId}</p>
+                  </div>
+                </div>
                 <button 
                   onClick={() => setSelectedTrainId(null)}
-                  className="text-slate-400 hover:text-slate-600"
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors"
                 >
-                  <X size={14} />
+                  <X size={18} className="text-white/40" />
                 </button>
               </div>
               
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-500">Status</span>
-                  <span className={`font-bold px-2 py-0.5 rounded-full ${
-                    selectedTrainInfo.status === 'At Station' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'
+              <div className="grid grid-cols-2 gap-6 mb-8">
+                <div className="space-y-1">
+                  <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em]">Status</span>
+                  <p className={`text-sm font-black uppercase tracking-widest ${
+                    selectedTrainInfo.status === 'At Station' ? 'text-accent-cyan' : 'text-accent-amber'
                   }`}>
                     {selectedTrainInfo.status}
-                  </span>
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em]">Variance</span>
+                  <p className={`text-sm font-black font-mono ${selectedTrainInfo.delay > 15 ? 'text-accent-rose' : 'text-accent-cyan'}`}>
+                    +{selectedTrainInfo.delay}m
+                  </p>
                 </div>
 
                 {selectedTrainInfo.status === 'In Transit' ? (
                   <>
-                    <div className="flex flex-col gap-1 text-xs border-l-2 border-slate-200 pl-2 ml-1">
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">From</span>
-                        <span className="font-medium text-slate-700 text-right">{selectedTrainInfo.fromStation}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-500">To</span>
-                        <span className="font-medium text-slate-700 text-right">{selectedTrainInfo.toStation}</span>
-                      </div>
+                    <div className="space-y-1">
+                      <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em]">From</span>
+                      <p className="text-sm font-black text-white">{selectedTrainInfo.fromStation}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em]">To</span>
+                      <p className="text-sm font-black text-white">{selectedTrainInfo.toStation}</p>
                     </div>
                   </>
                 ) : (
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-500">Current Station</span>
-                    <span className="font-medium text-slate-700">{selectedTrainInfo.stationName}</span>
+                  <div className="space-y-1 col-span-2">
+                    <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em]">Current Node</span>
+                    <p className="text-sm font-black text-white">{selectedTrainInfo.stationName}</p>
                   </div>
                 )}
-
-                <div className="mt-2 pt-2 border-t border-slate-100 flex justify-between items-center">
-                  <span className="text-xs text-slate-500 flex items-center gap-1">
-                    <Clock size={12} /> Delay
-                  </span>
-                  <span className={`text-sm font-bold ${
-                    selectedTrainInfo.delay > 60 ? 'text-rose-600' : 
-                    selectedTrainInfo.delay > 15 ? 'text-amber-600' : 'text-emerald-600'
-                  }`}>
-                    {selectedTrainInfo.delay} min
-                  </span>
-                </div>
               </div>
+
+              <button className="w-full py-4 bg-accent-cyan text-black font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl hover:scale-[1.02] transition-transform shadow-[0_0_30px_rgba(0,209,255,0.3)]">
+                Intercept Communications
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-
-      <div className="flex items-center gap-4 px-2">
-        <button 
-          onClick={() => onPlayPause && onPlayPause(!isPlaying)}
-          className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors text-slate-700"
-        >
-          {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" />}
-        </button>
-        
-        <div className="flex-1 flex flex-col gap-1">
-          <div className="flex justify-between text-xs font-medium text-slate-500">
-            <span>00:00</span>
-            <span className="text-accent-violet font-bold">{formatTime(currentTime)}</span>
-            <span>23:59</span>
-          </div>
-          <input 
-            type="range" 
-            min="0" 
-            max="1440" 
-            value={currentTime} 
-            onChange={(e) => onTimeChange && onTimeChange(parseInt(e.target.value))}
-            className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-accent-violet"
-          />
-        </div>
       </div>
     </div>
   );
@@ -1121,21 +1208,28 @@ export const CauseAnalysisChart = ({ data }: ChartProps) => {
   }, [data]);
 
   return (
-    <div className="bg-card-bg border border-slate-200 rounded-2xl p-5 shadow-card h-full flex flex-col">
-      <h3 className="text-text-primary font-bold text-lg mb-1">Delay Cause Analysis</h3>
-      <p className="text-xs text-text-secondary mb-4">Breakdown of delays by their primary reported cause.</p>
+    <div className="glass-panel rounded-3xl p-8 h-full flex flex-col relative overflow-hidden">
+      <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+        <Activity size={120} />
+      </div>
       
-      <div className="flex-1 min-h-[300px]">
+      <div className="relative z-10">
+        <h3 className="text-white font-black text-xl uppercase tracking-widest italic">Causal Attribution</h3>
+        <p className="metadata-xs text-text-secondary mt-1">Breakdown of delays by primary reported cause.</p>
+      </div>
+      
+      <div className="flex-1 min-h-[300px] relative z-10">
         <Plot
           data={[{
             values: chartData.values,
             labels: chartData.labels,
             type: 'pie',
-            hole: 0.6,
+            hole: 0.7,
             marker: {
-              colors: ['#06b6d4', '#10b981', '#f59e0b', '#8b5cf6', '#f43f5e']
+              colors: ['#00D1FF', '#BF5AF2', '#FFB800', '#FF2D55', '#32D74B']
             },
-            textinfo: 'label+percent',
+            textinfo: 'none',
+            hoverinfo: 'label+percent',
             insidetextorientation: 'radial'
           }]}
           layout={{
@@ -1143,31 +1237,41 @@ export const CauseAnalysisChart = ({ data }: ChartProps) => {
             height: 300,
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#64748b', family: 'Inter, sans-serif' },
+            font: { color: 'rgba(255,255,255,0.5)', family: 'Inter, sans-serif' },
             margin: { l: 0, r: 0, t: 0, b: 0 },
             showlegend: false
           }}
-          config={{ responsive: true, displayModeBar: false }}
+          config={{ 
+            responsive: true, 
+            displayModeBar: false,
+            scrollZoom: true,
+            displaylogo: false
+          }}
           className="w-full"
         />
+        
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+          <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] block mb-1">Total Events</span>
+          <span className="text-3xl font-black text-white font-mono">{chartData.values.reduce((a: number, b: number) => a + b, 0)}</span>
+        </div>
       </div>
 
-      <div className="mt-6 border-t border-slate-100 pt-6">
-        <h4 className="metadata-xs font-bold text-text-muted uppercase tracking-widest mb-4">Top 3 Primary Disruptors</h4>
-        <div className="space-y-4">
+      <div className="mt-8 border-t border-white/5 pt-8 relative z-10">
+        <h4 className="text-[10px] font-black text-accent-cyan uppercase tracking-[0.3em] mb-6">Primary Disruptors</h4>
+        <div className="space-y-6">
           {causeStats.map((item, idx) => (
-            <div key={item.cause} className="group">
-              <div className="flex justify-between items-center mb-1">
-                <div className="flex items-center gap-2">
-                  <span className="metadata-xs font-bold text-accent-cyan">0{idx + 1}</span>
-                  <span className="label-sm text-text-primary">{item.cause}</span>
+            <div key={item.cause} className="group cursor-pointer">
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-black text-accent-cyan/40 group-hover:text-accent-cyan transition-colors font-mono">0{idx + 1}</span>
+                  <span className="text-sm font-black text-white uppercase tracking-widest group-hover:text-accent-cyan transition-colors">{item.cause}</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="metadata-xs font-bold text-accent-rose">{item.avgDelay}m</span>
-                  <span className="metadata-xs text-text-muted">avg</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-black text-accent-rose font-mono">+{item.avgDelay}m</span>
+                  <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">avg</span>
                 </div>
               </div>
-              <p className="text-[11px] text-text-secondary leading-relaxed pl-6 group-hover:text-text-primary transition-colors">
+              <p className="text-[11px] text-text-secondary leading-relaxed pl-7 group-hover:text-white transition-colors">
                 {item.explanation}
               </p>
             </div>

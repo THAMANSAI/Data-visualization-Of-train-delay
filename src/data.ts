@@ -16,6 +16,14 @@ export interface TrainData {
   Railway_Zone: string;
   Weather_Condition: string;
   Cause: string;
+  Hour: number;
+  Distance_KM: number;
+  Passenger_Count: number;
+  Capacity: number;
+  Satisfaction: number;
+  Temperature: number;
+  Train_Age: number;
+  Day_Of_Week: string;
 }
 
 const WEATHER = ['Clear', 'Rainy', 'Foggy', 'Monsoon'];
@@ -79,7 +87,16 @@ export const generateData = (days: number = 7): TrainData[] => {
 
             const scheduledArrival = currentTrainTime;
             const actualArrival = addMinutes(scheduledArrival, delay);
+            const hour = scheduledArrival.getHours();
+            const distance = index * 100 + Math.floor(Math.random() * 50);
             
+            const passengerCount = 500 + Math.floor(Math.random() * 1000);
+            const capacity = 1200 + Math.floor(Math.random() * 300);
+            const satisfaction = Math.max(0, Math.min(100, 85 - (delay / 2) + (Math.random() * 10 - 5)));
+            const temperature = 20 + (Math.random() * 15);
+            const trainAge = 2 + Math.floor(Math.random() * 25);
+            const dayOfWeek = format(currentDate, 'EEEE');
+
             data.push({
                 Train_ID: train_number,
                 Train_Name: train_name,
@@ -94,7 +111,15 @@ export const generateData = (days: number = 7): TrainData[] => {
                 Date: format(currentDate, 'yyyy-MM-dd'),
                 Railway_Zone: station_code,
                 Weather_Condition: weather,
-                Cause: cause
+                Cause: cause,
+                Hour: hour,
+                Distance_KM: distance,
+                Passenger_Count: passengerCount,
+                Capacity: capacity,
+                Satisfaction: satisfaction,
+                Temperature: temperature,
+                Train_Age: trainAge,
+                Day_Of_Week: dayOfWeek
             });
 
             // Travel time to next station (30-60 mins)

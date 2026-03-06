@@ -83,6 +83,17 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
     
     svg.selectAll("*").remove();
 
+    // --- Zoom Behavior ---
+    const container = svg.append("g").attr("class", "zoom-container");
+    
+    const zoom = d3.zoom<SVGSVGElement, unknown>()
+      .scaleExtent([0.5, 5])
+      .on("zoom", (event) => {
+        container.attr("transform", event.transform);
+      });
+
+    svg.call(zoom);
+
     // --- Definitions for Gradients & Filters ---
     const defs = svg.append("defs");
 
@@ -163,17 +174,17 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
     });
 
     // --- Draw Group Backgrounds (Subtle Zones) ---
-    const groupG = svg.append("g").attr("class", "groups");
+    const groupG = container.append("g").attr("class", "groups");
     
-    const groupCircles = groupG.selectAll("circle")
+    const groupCircles = groupG.selectAll<SVGCircleElement, GroupData>("circle")
       .data(processedData.groups)
       .join("circle")
-      .attr("cx", d => groupCenters[d.id].x)
-      .attr("cy", d => groupCenters[d.id].y)
+      .attr("cx", (d: GroupData) => groupCenters[d.id].x)
+      .attr("cy", (d: GroupData) => groupCenters[d.id].y)
       .attr("r", 0)
-      .attr("fill", d => colorScale(d.id) as string)
+      .attr("fill", (d: GroupData) => colorScale(d.id) as string)
       .attr("opacity", 0.05)
-      .attr("stroke", d => colorScale(d.id) as string)
+      .attr("stroke", (d: GroupData) => colorScale(d.id) as string)
       .attr("stroke-width", 1)
       .attr("stroke-dasharray", "4 4");
 
@@ -183,12 +194,12 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
       .attr("r", 140);
 
     // --- Draw Group Labels ---
-    const labelG = svg.append("g").attr("class", "labels");
+    const labelG = container.append("g").attr("class", "labels");
     
-    const labels = labelG.selectAll("g")
+    const labels = labelG.selectAll<SVGGElement, GroupData>("g")
       .data(processedData.groups)
       .join("g")
-      .attr("transform", d => `translate(${groupCenters[d.id].x}, ${groupCenters[d.id].y - 160})`)
+      .attr("transform", (d: GroupData) => `translate(${groupCenters[d.id].x}, ${groupCenters[d.id].y - 160})`)
       .attr("opacity", 0);
 
     labels.append("text")
@@ -198,7 +209,7 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
       .attr("font-weight", "800")
       .attr("font-family", "Inter, sans-serif")
       .attr("letter-spacing", "0.05em")
-      .text(d => d.id.toUpperCase());
+      .text((d: GroupData) => d.id.toUpperCase());
 
     labels.append("text")
       .attr("dy", "1.4em")
@@ -206,7 +217,7 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
       .attr("fill", "#64748b")
       .attr("font-size", "11px")
       .attr("font-family", "Inter, sans-serif")
-      .text(d => `${d.count} Active Units`);
+      .text((d: GroupData) => `${d.count} Active Units`);
 
     labels.transition()
       .delay(800)
@@ -221,14 +232,14 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
       .force("charge", d3.forceManyBody().strength(-2));
 
     // --- Draw Nodes (Bubbles) ---
-    const nodeG = svg.append("g").attr("class", "nodes");
+    const nodeG = container.append("g").attr("class", "nodes");
 
-    const node = nodeG.selectAll("circle")
+    const node = nodeG.selectAll<SVGCircleElement, NodeData>("circle")
       .data(processedData.nodes)
       .join("circle")
       .attr("r", 0)
       // Use the radial gradient defined earlier
-      .attr("fill", d => `url(#grad-${d.group.replace(/\s+/g, '-')})`)
+      .attr("fill", (d: NodeData) => `url(#grad-${d.group.replace(/\s+/g, '-')})`)
       .attr("stroke", "#ffffff")
       .attr("stroke-width", 1)
       .attr("stroke-opacity", 0.4)
@@ -242,17 +253,17 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
     // Animate nodes entry
     node.transition()
       .duration(1000)
-      .delay((d, i) => i * 3)
+      .delay((d: NodeData, i: number) => i * 3)
       .ease(d3.easeBackOut.overshoot(1.7))
-      .attr("r", d => d.radius);
+      .attr("r", (d: NodeData) => d.radius);
 
     // --- Tooltip Logic ---
     const tooltip = d3.select("body").append("div")
       .attr("class", "fixed z-50 px-4 py-3 text-sm bg-white/90 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl pointer-events-none opacity-0 transition-opacity duration-200 transform -translate-x-1/2 -translate-y-full mb-2");
 
-    node.on("mouseover", (event, d) => {
+    node.on("mouseover", (event: MouseEvent, d: NodeData) => {
       // Highlight effect
-      d3.select(event.currentTarget)
+      d3.select(event.currentTarget as SVGCircleElement)
         .transition()
         .duration(300)
         .attr("r", d.radius * 1.2)
@@ -276,14 +287,14 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
       .style("left", (event.pageX) + "px")
       .style("top", (event.pageY - 10) + "px");
     })
-    .on("mousemove", (event) => {
+    .on("mousemove", (event: MouseEvent) => {
        tooltip
         .style("left", (event.pageX) + "px")
         .style("top", (event.pageY - 10) + "px");
     })
-    .on("mouseout", (event, d) => {
+    .on("mouseout", (event: MouseEvent, d: NodeData) => {
       // Reset effect
-      d3.select(event.currentTarget)
+      d3.select(event.currentTarget as SVGCircleElement)
         .transition()
         .duration(300)
         .attr("r", d.radius)
@@ -296,12 +307,12 @@ export const PackedBubbleChart = ({ data }: PackedBubbleChartProps) => {
     // --- Simulation Tick ---
     simulation.on("tick", () => {
       node
-        .attr("cx", d => d.x!)
-        .attr("cy", d => d.y!);
+        .attr("cx", (d: NodeData) => d.x!)
+        .attr("cy", (d: NodeData) => d.y!);
       
       // Gentle floating motion when alpha is low
       if (simulation.alpha() < 0.05) {
-        node.attr("cy", d => d.y! + Math.sin(Date.now() / 1000 + d.x!) * 2);
+        node.attr("cy", (d: NodeData) => d.y! + Math.sin(Date.now() / 1000 + d.x!) * 2);
       }
     });
 

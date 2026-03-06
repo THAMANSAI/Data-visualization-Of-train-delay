@@ -3,48 +3,48 @@ import { TrainData } from '../data';
 
 export const TrainDetailsTable = ({ data }: { data: TrainData[] }) => {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-card overflow-hidden">
-      <div className="p-6 border-b border-slate-100 bg-slate-50/50">
-        <h3 className="text-xl font-bold text-text-primary font-serif italic">Train Operations Details</h3>
-        <p className="text-sm text-text-muted mt-1">Comprehensive log of train movements, station delays, and operational status.</p>
+    <div className="glass-panel rounded-[2rem] overflow-hidden">
+      <div className="p-8 border-b border-white/5 bg-white/5">
+        <h3 className="text-2xl font-black text-white uppercase tracking-widest italic">Operations Log</h3>
+        <p className="text-sm text-text-secondary mt-2 font-medium">Real-time telemetry and schedule adherence data.</p>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-slate-50 text-text-secondary font-medium border-b border-slate-200">
+      <div className="overflow-x-auto custom-scrollbar">
+        <table className="w-full text-sm text-left border-collapse">
+          <thead className="bg-white/5 text-accent-cyan font-black uppercase tracking-widest text-[10px] border-b border-white/10">
             <tr>
-              <th className="px-6 py-4 whitespace-nowrap">Train No.</th>
-              <th className="px-6 py-4 whitespace-nowrap">Train Name</th>
-              <th className="px-6 py-4 whitespace-nowrap">Station</th>
-              <th className="px-6 py-4 whitespace-nowrap">Scheduled Arrival</th>
-              <th className="px-6 py-4 whitespace-nowrap">Actual Arrival</th>
-              <th className="px-6 py-4 whitespace-nowrap">Delay (Min)</th>
-              <th className="px-6 py-4 whitespace-nowrap">Status</th>
-              <th className="px-6 py-4 whitespace-nowrap">Cause</th>
+              <th className="px-8 py-5 whitespace-nowrap">Unit ID</th>
+              <th className="px-8 py-5 whitespace-nowrap">Designation</th>
+              <th className="px-8 py-5 whitespace-nowrap">Node</th>
+              <th className="px-8 py-5 whitespace-nowrap">ETA</th>
+              <th className="px-8 py-5 whitespace-nowrap">ATA</th>
+              <th className="px-8 py-5 whitespace-nowrap">Variance</th>
+              <th className="px-8 py-5 whitespace-nowrap">Status</th>
+              <th className="px-8 py-5 whitespace-nowrap">Telemetry</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-white/5">
             {data.map((row, index) => (
-              <tr key={index} className="hover:bg-slate-50/50 transition-colors">
-                <td className="px-6 py-4 font-mono text-text-primary font-medium">{row.Train_ID}</td>
-                <td className="px-6 py-4 text-text-primary font-medium">{row.Train_Name}</td>
-                <td className="px-6 py-4 text-text-secondary">{row.Station_Name}</td>
-                <td className="px-6 py-4 text-text-secondary tabular-nums">{row.Scheduled_Arrival}</td>
-                <td className="px-6 py-4 text-text-secondary tabular-nums">{row.Actual_Arrival}</td>
-                <td className={`px-6 py-4 font-bold tabular-nums ${row.Delay_Minutes > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
-                  {row.Delay_Minutes}
+              <tr key={index} className="hover:bg-white/5 transition-all duration-300 group">
+                <td className="px-8 py-5 font-mono text-white font-black group-hover:text-accent-cyan transition-colors">{row.Train_ID}</td>
+                <td className="px-8 py-5 text-white font-bold">{row.Train_Name}</td>
+                <td className="px-8 py-5 text-text-secondary font-medium">{row.Station_Name}</td>
+                <td className="px-8 py-5 text-text-secondary tabular-nums font-mono">{row.Scheduled_Arrival}</td>
+                <td className="px-8 py-5 text-text-secondary tabular-nums font-mono">{row.Actual_Arrival}</td>
+                <td className={`px-8 py-5 font-black font-mono tabular-nums ${row.Delay_Minutes > 0 ? 'text-accent-rose' : 'text-accent-cyan'}`}>
+                  {row.Delay_Minutes}m
                 </td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-bold border ${
+                <td className="px-8 py-5">
+                  <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
                     row.Delay_Minutes === 0 
-                      ? 'bg-emerald-50 text-emerald-700 border-emerald-100' 
+                      ? 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/20' 
                       : row.Delay_Minutes < 15 
-                        ? 'bg-amber-50 text-amber-700 border-amber-100' 
-                        : 'bg-rose-50 text-rose-700 border-rose-100'
+                        ? 'bg-accent-amber/10 text-accent-amber border-accent-amber/20' 
+                        : 'bg-accent-rose/10 text-accent-rose border-accent-rose/20'
                   }`}>
-                    {row.Delay_Minutes === 0 ? 'On Time' : 'Delayed'}
+                    {row.Delay_Minutes === 0 ? 'Nominal' : 'Critical'}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-text-secondary text-xs">{row.Cause}</td>
+                <td className="px-8 py-5 text-text-muted text-[10px] font-bold uppercase tracking-tighter">{row.Cause}</td>
               </tr>
             ))}
           </tbody>
